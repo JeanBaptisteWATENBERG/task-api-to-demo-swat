@@ -1,0 +1,187 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Task Api
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /tasks:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: tasks
+    post:
+      security:
+        - basic: []
+      description: Creates a new task
+      summary: Creates a new task
+      # used as the method name of the controller
+      operationId: createTasks
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/CreateTask'
+      responses:
+        "200":
+          description: Created task
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Task"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      security:
+        - basic: []
+      description: Returns all tasks
+      summary: Returns all tasks
+      # used as the method name of the controller
+      operationId: getTasks
+      parameters:
+        - name: title
+          in: query
+          description: Filters tasks by title
+          required: false
+          type: string
+        - name: status
+          in: query
+          description: Filters tasks by status
+          required: false
+          type: string
+          enum: ['TODO','DOING','DONE']
+      responses:
+        "200":
+          description: List of task
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Tasks"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /tasks/{id}:
+    x-swagger-router-controller: tasks
+    parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+    patch:
+      security:
+        - basic: []
+      description: Updates a specific task
+      summary: Updates a specific task
+      operationId: updateTask
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema: 
+            $ref: '#/definitions/UpdateTask'
+      responses:
+        "200":
+          description: Updated task
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Task"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"  
+    get:
+      security:
+        - basic: []
+      description: Returns a specific task
+      summary: Returns a specific task
+      operationId: getTask
+      responses:
+        "200":
+          description: Retrieved task
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Task"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      security:
+        - basic: []
+      description: Deletes a specific task
+      summary: Deletes a specific task
+      operationId: deleteTask
+      responses:
+        "204":
+          description: Task successfully deleted
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+
+securityDefinitions:
+  basic:
+    type: basic
+
+definitions:
+  Tasks:
+    type: array
+    items:
+      $ref: '#/definitions/Task'
+  Task:
+    required:
+      - title
+    properties:
+      id:
+        type: string
+        example: '99ac907e-6b32-4f80-a350-033aaa3a2674'
+      title:
+        type: string
+        example: 'Task title'
+      status:
+        type: string
+        enum: ['TODO','DOING','DONE']
+  CreateTask:
+    required:
+      - title
+    properties:
+      title:
+        type: string
+        example: 'Task title'
+      status:
+        type: string
+        enum: ['TODO','DOING','DONE']
+  UpdateTask:
+    properties:
+      title:
+        type: string
+        example: 'Task title'
+      status:
+        type: string
+        enum: ['TODO','DOING','DONE']
+  
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
