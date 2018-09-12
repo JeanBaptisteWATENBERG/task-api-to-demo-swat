@@ -27,7 +27,7 @@ var config = {
       if (splittedCredentials.length !== 2 || splittedCredentials[0] === '') {
         return cb(new Error('access denied !'));
       }
-      
+
       cb();
     }  
   }
@@ -42,7 +42,5 @@ SwaggerExpress.create(config, function (err, swaggerExpress) {
   var port = process.env.PORT || 10010;
   app.listen(port);
 
-  if (swaggerExpress.runner.swagger.paths['/hello']) {
-    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
-  }
+  console.log('try this:\ncurl http://127.0.0.1:' + port + '/swagger');
 });

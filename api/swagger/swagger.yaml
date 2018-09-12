@@ -76,11 +76,6 @@ paths:
             $ref: "#/definitions/ErrorResponse"
   /tasks/{id}:
     x-swagger-router-controller: tasks
-    parameters:
-      - name: id
-        in: path
-        type: string
-        required: true
     patch:
       security:
         - basic: []
@@ -93,6 +88,10 @@ paths:
           required: true
           schema: 
             $ref: '#/definitions/UpdateTask'
+        - name: id
+          in: path
+          type: string
+          required: true
       responses:
         "200":
           description: Updated task
@@ -110,6 +109,11 @@ paths:
       description: Returns a specific task
       summary: Returns a specific task
       operationId: getTask
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
       responses:
         "200":
           description: Retrieved task
@@ -127,6 +131,11 @@ paths:
       description: Deletes a specific task
       summary: Deletes a specific task
       operationId: deleteTask
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
       responses:
         "204":
           description: Task successfully deleted

@@ -13,11 +13,12 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "should": "^7.1.0",
-    "supertest": "^1.0.0"
+    "jest": "^23.6.0"
   },
   "scripts": {
     "start": "node app.js",
-    "test": "swagger project test"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:watch-all": "jest --watchAll"
   }
 }
